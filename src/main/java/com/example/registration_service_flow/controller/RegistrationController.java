@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/v1")
@@ -95,11 +97,12 @@ public class RegistrationController {
 
 
     private String applicationURL(HttpServletRequest request) {
-//        return "https://" +
-//                request.getServerName() +
-//                ":" + request.getServerPort()
-//                + request.getContextPath();
-        return "https://"+
-                request.getContextPath();
+//        log.info("Request uri: {}", request.getRequestURI());
+//        log.info("Request url: {}", request.getRequestURL());
+
+        String url = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        log.info("URL: {}", url);
+
+        return url + request.getContextPath();
     }
 }
