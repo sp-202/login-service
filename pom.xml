@@ -75,6 +75,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>login_Service</finalName>
     </build>
 
 </project>
