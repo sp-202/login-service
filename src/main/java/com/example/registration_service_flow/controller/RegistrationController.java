@@ -102,7 +102,7 @@ public class RegistrationController {
 
         String url = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         log.info("URL: {}", url);
-
-        return url + request.getContextPath();
+        String str = "https://time.crazyandroid.tech";
+        return str + request.getContextPath();
     }
 }
