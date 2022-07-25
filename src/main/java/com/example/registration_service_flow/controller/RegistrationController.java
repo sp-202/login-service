@@ -16,12 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/v1")
 @Slf4j
+@CrossOrigin("*")
 public class RegistrationController {
 
     @Autowired
@@ -60,8 +59,11 @@ public class RegistrationController {
         String result = userService.verifyUserEmailAddress(token);
         if (result.equalsIgnoreCase("verified")) {
             return new ResponseEntity<>("Your email-id is successfully verified", HttpStatus.OK);
-        } else {
+        } else if (result.equals("invalid") ||
+                result.equals("expired") || result.equals("something wrong")) {
             return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+        } else {
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
 
@@ -89,7 +91,7 @@ public class RegistrationController {
 
     private String regenerateToken(String applicationURL, String token) {
         String url = applicationURL
-                + "/v1/regenerateverification_token?token="
+                + "/v1/verifyregistration?token="
                 + token;
         log.info("Click the link to verify your account: {}", url);
         return url;
@@ -97,12 +99,10 @@ public class RegistrationController {
 
 
     private String applicationURL(HttpServletRequest request) {
-//        log.info("Request uri: {}", request.getRequestURI());
-//        log.info("Request url: {}", request.getRequestURL());
-
         String url = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         log.info("URL: {}", url);
         String str = "https://time.crazyandroid.tech";
+//        String str = "https://time.crazyandroid.tech";
         return str + request.getContextPath();
     }
 }
